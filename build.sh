@@ -5,7 +5,7 @@ echo $ENV
 
 if [ "$2" = "report" ]
 then
-    ENTRY=$1 ENV=$ENV npm run build --report
+    ENTRY=$1 ENV=$ENV pnpm run build --report
 else
-    ENTRY=$1 ENV=$ENV npm run build
+    ENTRY=$1 ENV=$ENV pnpm run build-only
 fi

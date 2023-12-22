@@ -8,26 +8,27 @@ import ElementPlus from 'unplugin-element-plus/vite'
 import path from 'node:path'
 
 console.log(((import.meta.url)), loadEnv)
-console.log((new URL('./src', import.meta.url)))
+// console.log((new URL('./src', import.meta.url)))
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
   command
   const rootUrl = 'src/views/' + process.env.ENTRY
+  // console.log("=======", path.resolve(__dirname, rootUrl, 'main.js'))
   return  {
     root: path.resolve(__dirname, rootUrl), //项目根目录（index.html 文件所在的位置） 默认： process.cwd()
-    base: '/', //  开发或生产环境服务的公共基础路径：默认'/'   1、绝对 URL 路径名： /foo/；  2、完整的 URL： https://foo.com/； 3、空字符串或 ./（用于开发环境）
+    base: './', //  开发或生产环境服务的公共基础路径：默认'/'   1、绝对 URL 路径名： /foo/；  2、完整的 URL： https://foo.com/； 3、空字符串或 ./（用于开发环境）
 
     // publicDir: resolve(__dirname, `./dist/${rootUrl}`), //默认'public'  作为静态资源服务的文件夹  (打包public文件夹会没有，里面得东西会直接编译在dist文件下)
     // assetsInclude: resolve(__dirname, './src/assets'), // 静态资源会处理
 
     build: {
-        outDir: `dist/${rootUrl}`, // 构建输出目录
+        outDir: `${__dirname}/dist/${rootUrl}`, // 构建输出目录
         minify: true, // 是否压缩代码
         sourcemap: true, // 是否生成 source map
         rollupOptions: {
           input: {
-              index: path.resolve(__dirname, rootUrl, 'main.js'),
+              index: path.resolve(__dirname, rootUrl, 'index.html'),
           },
         },
     },
