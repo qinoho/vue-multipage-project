@@ -8,7 +8,7 @@ This template is designed to create a multi-portal-like project
 
 Multiple directories can be created under src->views, each project contains a separate entry main.js index .html template, which can be individually packaged into a unified dist file through shell scripts.
 
-## 项目运行 
+## 项目运行
 
 本地运行
 
@@ -23,3 +23,5 @@ sh dev.sh 项目目录(src/views后边的路径)
 sh build.sh 项目目录(src/views后边的路径)
 例如: sh build.sh test
 ```
+
+本分支 集成 lib-flexable + pxtorem 实现自适应开发
