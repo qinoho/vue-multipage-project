@@ -7,5 +7,5 @@ if [ "$2" = "report" ]
 then
     ENTRY=$1 ENV=$ENV pnpm run build --report
 else
-    ENTRY=$1 ENV=$ENV pnpm run build-only
+    ENTRY=$1 ENV=$ENV pnpm run build
 fi

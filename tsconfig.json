@@ -30,7 +30,7 @@
     // 是否移除注释，默认false
     "removeComments":false,
     // 是否不生成编译后文件，默认false
-    "noEmit": false,
+    "noEmit": true,
     // 当有错误时是否生成文件，默认false
     "noEmitOnError": false,
     // 是否生成sourceMap，默认false  这个文件里保存的，是转换后代码的位置，和对应的转换前的位置。有了它，出错的时候，通过断点工具可以直接显示原始代码，而不是转换后的代码。
