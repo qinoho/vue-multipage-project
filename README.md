@@ -1,46 +1,25 @@
-# demomutilpro
+# mutilpro
 
-This template should help get you started developing with Vue 3 in Vite.
+这个模板旨在创建一个类似多入口的项目
 
-## Recommended IDE Setup
+在src->views下面可以创建多个目录, 每个项目含有单独的入口main.js index.html模板, 通过shell脚本单独打包到统一的dist文件下.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+This template is designed to create a multi-portal-like project
 
-## Type Support for `.vue` Imports in TS
+Multiple directories can be created under src->views, each project contains a separate entry main.js index .html template, which can be individually packaged into a unified dist file through shell scripts.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## 项目运行 
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+本地运行
 
 ```sh
-npm install
+sh dev.sh 项目目录(src/views后边的路径)
+例如: sh dev.sh test
 ```
 
-### Compile and Hot-Reload for Development
+打包
 
 ```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
+sh build.sh 项目目录(src/views后边的路径)
+例如: sh build.sh test
 ```
