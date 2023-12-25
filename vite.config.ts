@@ -1,11 +1,12 @@
 import { fileURLToPath, URL } from 'node:url'
+import path from 'node:path'
 
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { visualizer } from 'rollup-plugin-visualizer'
+
 import ElementPlus from 'unplugin-element-plus/vite'
-import path from 'node:path'
 
 console.log(((import.meta.url)), loadEnv)
 // console.log((new URL('./src', import.meta.url)))
@@ -30,6 +31,17 @@ export default defineConfig(({ command }) => {
           input: {
               index: path.resolve(__dirname, rootUrl, 'index.html'),
           },
+          output: {
+            chunkFileNames: 'static/js/[name]-[hash].js',
+            entryFileNames: 'static/js/[name]-[hash].js',
+            assetFileNames: 'static/[ext]/name-[hash].[ext]'
+          },
+          manualChunks(id) {
+            if (id.includes("node_modules")) {
+              // 让每个插件都打包成独立的文件
+              return id .toString() .split("node_modules/")[1] .split("/")[0] .toString(); 
+            }
+          }
         },
     },
     /******配置开发服务器******/
