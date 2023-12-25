@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="app">
     <h1>测试组件能否正常使用</h1>
     <MyContent />
   </div>
@@ -11,4 +11,9 @@ import MyContent from './cpns/contnet.vue'
 console.log('123312312312============')
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#app {
+  font-size: 18px;
+  color: red;
+}
+</style>
