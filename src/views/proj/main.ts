@@ -1,12 +1,9 @@
 // import './assets/main.css'
-
-console.log('first')
 import { createApp } from 'vue'
 // // import { createPinia } from 'pinia'
-
 import App from './App.vue'
 // // import router from './router'
-
+import '@/lib/rem.js'
 const app = createApp(App)
 
 // // app.use(createPinia())
