@@ -6,15 +6,12 @@
 
 <script>
 export default {
-  setup () {
-    
+  setup() {
     console.log('你好哇!')
 
     return {}
-  }
+  },
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
