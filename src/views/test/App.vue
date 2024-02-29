@@ -1,21 +1,23 @@
 <template>
   <div>
-    <h1>哈哈哈哈哈哈或</h1>
-    <h2>{{ counter.count }}</h2>
-    <h2>{{ counter.doubleCount }}</h2>
-    <button @click="counter.increment">add</button>
+    <button @click="toHome">home</button>
+    <button @click="toProfile">profile</button>
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </div>
 </template>
 
-<script>
-import { useCounterStore } from './stores'
-export default {
-  setup() {
-    const counter = useCounterStore()
-    console.log('123312312312============')
-
-    return { counter }
-  },
+<script setup>
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const toHome = () => {
+  router.push('/home')
+}
+const toProfile = () => {
+  router.push('/profile')
 }
 </script>
 

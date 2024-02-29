@@ -16,6 +16,7 @@
     "commit": "commit"
   },
   "dependencies": {
+    "echarts": "^5.5.0",
     "element-plus": "^2.4.4",
     "pinia": "^2.1.7",
     "rollup-plugin-visualizer": "^5.11.0",
