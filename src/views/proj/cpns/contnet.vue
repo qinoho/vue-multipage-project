@@ -1,15 +1,9 @@
 <template>
   <div>
-    <h1>
-      我是组件content
-    </h1>
+    <h1>我是组件content</h1>
   </div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

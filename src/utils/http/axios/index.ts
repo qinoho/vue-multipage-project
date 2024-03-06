@@ -1,33 +1,33 @@
 // axios配置  可自行根据项目进行更改，只需更改该文件即可，其他文件可以不动
-import { VAxios } from './Axios';
-import { AxiosTransform } from './axiosTransform';
-import axios, { AxiosResponse } from 'axios';
-import { checkStatus } from './checkStatus';
-import { joinTimestamp, formatRequestDate } from './helper';
-import { RequestEnum, ResultEnum, ContentTypeEnum } from '@/enums/httpEnum';
-import { PageEnum } from '@/enums/pageEnum';
+import { VAxios } from './Axios'
+import { AxiosTransform } from './axiosTransform'
+import axios, { AxiosResponse } from 'axios'
+import { checkStatus } from './checkStatus'
+import { joinTimestamp, formatRequestDate } from './helper'
+import { RequestEnum, ResultEnum, ContentTypeEnum } from '@/enums/httpEnum'
+import { PageEnum } from '@/enums/pageEnum'
 
-import { useGlobSetting } from '@/hooks/setting';
-import { useMessage } from '@/hooks/web/useMessage';
-import { useDialog } from '@/hooks/web/useDialog';
+import { useGlobSetting } from '@/hooks/setting'
+import { useMessage } from '@/hooks/web/useMessage'
+import { useDialog } from '@/hooks/web/useDialog'
 
-import { isString } from '@/utils/is/';
-import { deepMerge, isUrl } from '@/utils';
-import { setObjToUrlParams } from '@/utils/urlUtils';
+import { isString } from '@/utils/is/'
+import { deepMerge, isUrl } from '@/utils'
+import { setObjToUrlParams } from '@/utils/urlUtils'
 
-import { RequestOptions, Result, CreateAxiosOptions } from './types';
+import { RequestOptions, Result, CreateAxiosOptions } from './types'
 
-import { useUserStoreWidthOut } from '@/store/modules/user';
-import { useRoute, useRouter } from 'vue-router';
-import { handlerUrl } from "@/utils/index";
-import { clientTicketLogin } from '@/api/system/user';
-import { ACCESS_TOKEN } from '@/store/mutation-types';
-const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME;
-const globSetting = useGlobSetting();
-const urlPrefix = globSetting.urlPrefix || '';
+import { useUserStoreWidthOut } from '@/store/modules/user'
+import { useRoute, useRouter } from 'vue-router'
+import { handlerUrl } from '@/utils/index'
+import { clientTicketLogin } from '@/api/system/user'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME
+const globSetting = useGlobSetting()
+const urlPrefix = globSetting.urlPrefix || ''
 
-import router from '@/router';
-import { storage } from '@/utils/Storage';
+import router from '@/router'
+import { storage } from '@/utils/Storage'
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -45,63 +45,62 @@ const transform: AxiosTransform = {
       errorMessageText,
       isTransformResponse,
       isReturnNativeResponse,
-    } = options;
+    } = options
 
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
-      return res;
+      return res
     }
     // 不进行任何处理，直接返回
     // 用于页面代码可能需要直接获取code，data，message这些信息时开启
     if (!isTransformResponse) {
-      if (res && (res.data.code == 1003)) {
-        const userStore = useUserStoreWidthOut();
-        const router = useRouter();
-        const route = useRoute();
-        let locationUrl:any = handlerUrl();
+      if (res && res.data.code == 1003) {
+        const userStore = useUserStoreWidthOut()
+        const router = useRouter()
+        const route = useRoute()
+        const locationUrl: any = handlerUrl()
         console.log(handlerUrl())
         if (locationUrl.ticket) {
-          clientTicketLogin({}).then(res => {
-            console.log('clientTicketLogin',res)
+          clientTicketLogin({}).then((res) => {
+            console.log('clientTicketLogin', res)
             if (res.code == 0) {
-              const ex = 7 * 24 * 60 * 60 * 1000;
-              storage.set(ACCESS_TOKEN, res.data.tokenValue, ex);
-              userStore.setToken(res.data.tokenValue);
+              const ex = 7 * 24 * 60 * 60 * 1000
+              storage.set(ACCESS_TOKEN, res.data.tokenValue, ex)
+              userStore.setToken(res.data.tokenValue)
               try {
-                const toPath = decodeURIComponent((route.query?.redirect || '/') as string);
+                const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
                 if (route.name === LOGIN_NAME) {
-                  router.replace('/');
-                } else router.replace(toPath);
+                  router.replace('/')
+                } else router.replace(toPath)
               } catch (error) {
                 console.log(error)
-                window.location.reload();
+                window.location.reload()
               }
-              
             } else {
               console.error(res.message)
             }
           })
         } else {
-          userStore.login({});
+          userStore.login({})
         }
-        return false;
+        return false
       }
-      return res.data;
+      return res.data
     }
 
-    const { data } = res;
+    const { data } = res
 
-    const $dialog = useDialog();
-    const $message = useMessage();
+    const $dialog = useDialog()
+    const $message = useMessage()
 
     if (!data) {
       // return '[HTTP] Request has no return value';
-      throw new Error('请求出错，请稍候重试');
+      throw new Error('请求出错，请稍候重试')
     }
     //  这里 code，result，message为 后台统一的字段，需要修改为项目自己的接口返回格式
-    const { code, result, message } = data;
+    const { code, result, message } = data
     // 请求成功
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
+    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS
     // 是否显示提示信息
     if (isShowMessage) {
       if (hasSuccess && (successMessageText || isShowSuccessMessage)) {
@@ -109,10 +108,10 @@ const transform: AxiosTransform = {
         $dialog.success({
           type: 'success',
           content: successMessageText || message || '操作成功！',
-        });
+        })
       } else if (!hasSuccess && (errorMessageText || isShowErrorMessage)) {
         // 是否显示自定义信息提示
-        $message.error(message || errorMessageText || '操作失败！');
+        $message.error(message || errorMessageText || '操作失败！')
       } else if (!hasSuccess && options.errorMessageMode === 'modal') {
         // errorMessageMode=‘custom-modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
         $dialog.info({
@@ -120,28 +119,28 @@ const transform: AxiosTransform = {
           content: message,
           positiveText: '确定',
           onPositiveClick: () => {},
-        });
+        })
       }
     }
 
     // 接口请求成功，直接返回结果
     if (code === ResultEnum.SUCCESS) {
-      return result;
+      return result
     }
     // 接口请求错误，统一提示错误信息 这里逻辑可以根据项目进行修改
-    let errorMsg = message;
+    let errorMsg = message
     switch (code) {
       // 请求失败
       case ResultEnum.ERROR:
-        $message.error(errorMsg);
-        break;
+        $message.error(errorMsg)
+        break
       // 登录超时
       case ResultEnum.TIMEOUT:
-        const LoginName = PageEnum.BASE_LOGIN_NAME;
-        const LoginPath = PageEnum.BASE_LOGIN;
-        if (router.currentRoute.value?.name === LoginName) return;
+        const LoginName = PageEnum.BASE_LOGIN_NAME
+        const LoginPath = PageEnum.BASE_LOGIN
+        if (router.currentRoute.value?.name === LoginName) return
         // 到登录页
-        errorMsg = '登录超时，请重新登录!';
+        errorMsg = '登录超时，请重新登录!'
         $dialog.warning({
           title: '提示',
           content: '登录身份已失效，请重新登录!',
@@ -150,67 +149,67 @@ const transform: AxiosTransform = {
           closable: false,
           maskClosable: false,
           onPositiveClick: () => {
-            storage.clear();
-            window.location.href = LoginPath;
+            storage.clear()
+            window.location.href = LoginPath
           },
           onNegativeClick: () => {},
-        });
-        break;
+        })
+        break
     }
-    throw new Error(errorMsg);
+    throw new Error(errorMsg)
   },
 
   // 请求之前处理config
   beforeRequestHook: (config, options) => {
-    const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix } = options;
+    const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix } = options
 
-    const isUrlStr = isUrl(config.url as string);
+    const isUrlStr = isUrl(config.url as string)
 
     if (!isUrlStr && joinPrefix) {
-      config.url = `${urlPrefix}${config.url}`;
+      config.url = `${urlPrefix}${config.url}`
     }
 
     if (!isUrlStr && apiUrl && isString(apiUrl)) {
-      config.url = `${apiUrl}${config.url}`;
+      config.url = `${apiUrl}${config.url}`
     }
-    const params = config.params || {};
-    const data = config.data || false;
+    const params = config.params || {}
+    const data = config.data || false
     if (config.method?.toUpperCase() === RequestEnum.GET) {
       if (!isString(params)) {
         // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
-        config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
+        config.params = Object.assign(params || {}, joinTimestamp(joinTime, false))
       } else {
         // 兼容restful风格
-        config.url = config.url + params + `${joinTimestamp(joinTime, true)}`;
-        config.params = undefined;
+        config.url = config.url + params + `${joinTimestamp(joinTime, true)}`
+        config.params = undefined
       }
     } else {
       if (!isString(params)) {
-        formatDate && formatRequestDate(params);
+        formatDate && formatRequestDate(params)
         if (
           Reflect.has(config, 'data') &&
           config.data &&
           (Object.keys(config.data).length > 0 || config.data instanceof FormData)
         ) {
-          config.data = data;
-          config.params = params;
+          config.data = data
+          config.params = params
         } else {
-          config.data = params;
-          config.params = undefined;
+          config.data = params
+          config.params = undefined
         }
         if (joinParamsToUrl) {
           config.url = setObjToUrlParams(
             config.url as string,
             Object.assign({}, config.params, config.data),
-          );
+          )
         }
       } else {
         // 兼容restful风格
-        config.url = config.url + params;
-        config.params = undefined;
+        config.url = config.url + params
+        config.params = undefined
       }
     }
-    return config;
+    return config
   },
 
   /**
@@ -218,33 +217,33 @@ const transform: AxiosTransform = {
    */
   requestInterceptors: (config, options) => {
     // 请求之前处理config
-    const userStore = useUserStoreWidthOut();
-    const token = userStore.getToken;
+    const userStore = useUserStoreWidthOut()
+    const token = userStore.getToken
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
-      (config as Recordable).headers.ssoToken = options.authenticationScheme
+      ;(config as Recordable).headers.ssoToken = options.authenticationScheme
         ? `${options.authenticationScheme} ${token}`
-        : token;
+        : token
     }
-    return config;
+    return config
   },
 
   /**
    * @description: 响应错误处理
    */
   responseInterceptorsCatch: (error: any) => {
-    const $dialog = useDialog();
-    const $message = useMessage();
-    const { response, code, message } = error || {};
+    const $dialog = useDialog()
+    const $message = useMessage()
+    const { response, code, message } = error || {}
     // TODO 此处要根据后端接口返回格式修改
     const msg: string =
-      response && response.data && response.data.message ? response.data.message : '';
-    const err: string = error.toString();
+      response && response.data && response.data.message ? response.data.message : ''
+    const err: string = error.toString()
     try {
       if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
-        console.log(5555,message)
-        $message.error('接口请求超时，请刷新页面重试!');
-        return;
+        console.log(5555, message)
+        $message.error('接口请求超时，请刷新页面重试!')
+        return
       }
       if (err && err.includes('Network Error')) {
         $dialog.info({
@@ -256,23 +255,23 @@ const transform: AxiosTransform = {
           maskClosable: false,
           onPositiveClick: () => {},
           onNegativeClick: () => {},
-        });
-        return Promise.reject(error);
+        })
+        return Promise.reject(error)
       }
     } catch (error) {
-      throw new Error(error as any);
+      throw new Error(error as any)
     }
     // 请求是否被取消
-    const isCancel = axios.isCancel(error);
+    const isCancel = axios.isCancel(error)
     if (!isCancel) {
-      checkStatus(error.response && error.response.status, msg);
+      checkStatus(error.response && error.response.status, msg)
     } else {
-      console.warn(error, '请求被取消！');
+      console.warn(error, '请求被取消！')
     }
     //return Promise.reject(error);
-    return Promise.reject(response?.data);
+    return Promise.reject(response?.data)
   },
-};
+}
 
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
   console.log('globSetting.client==', globSetting)
@@ -318,10 +317,10 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
       },
       opt || {},
     ),
-  );
+  )
 }
 
-export const http = createAxios();
+export const http = createAxios()
 
 // 项目，多个不同 api 地址，直接在这里导出多个
 // src/api ts 里面接口，就可以单独使用这个请求，

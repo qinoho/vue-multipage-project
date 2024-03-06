@@ -1,6 +1,6 @@
 export function mobileAndTabletCheck() {
-  let check = false;
-  (function (a) {
+  let check = false
+  ;(function (a) {
     if (
       /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(
         a,
@@ -9,36 +9,36 @@ export function mobileAndTabletCheck() {
         a.substr(0, 4),
       )
     )
-      check = true;
-  })(navigator.userAgent || navigator.vendor || window.opera);
-  const mobileOri = typeof window.orientation !== 'undefined';
-  return check && mobileOri;
+      check = true
+  })(navigator.userAgent || navigator.vendor || window.opera)
+  const mobileOri = typeof window.orientation !== 'undefined'
+  return check && mobileOri
 }
 
 export function getWindowConfig() {
-  let windowWidth = window.innerWidth;
-  let windowHeight = window.innerHeight;
+  let windowWidth = window.innerWidth
+  let windowHeight = window.innerHeight
   if (typeof windowWidth !== 'number') {
     if (document.compatMode === 'CSS1Compat') {
-      windowWidth = document.documentElement.clientWidth;
-      windowHeight = document.documentElement.clientHeight;
+      windowWidth = document.documentElement.clientWidth
+      windowHeight = document.documentElement.clientHeight
     } else {
-      windowWidth = document.body.clientWidth;
-      windowHeight = window.body.clientHeight;
+      windowWidth = document.body.clientWidth
+      windowHeight = window.body.clientHeight
     }
   }
   return {
     windowWidth,
     windowHeight,
-  };
+  }
 }
 
 export function adaptH5SetPageHeight() {
   if (mobileAndTabletCheck()) {
-    const { windowHeight } = getWindowConfig();
-    console.log(windowHeight);
+    const { windowHeight } = getWindowConfig()
+    console.log(windowHeight)
     // document.documentElement.innerText = windowHeight;
-    document.body.style.height = windowHeight + 'px';
+    document.body.style.height = windowHeight + 'px'
   }
 }
 // adaptH5SetPageHeight();
